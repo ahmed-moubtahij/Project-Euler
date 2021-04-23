@@ -1,5 +1,5 @@
 {
-  "name": "k-means",
+  "name": "Project-Euler",
   "version": "0.0.1",
   "dependencies": [
     "fmt",
