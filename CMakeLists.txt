@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.15)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     CACHE PATH "Path to vcpkg toolchain")
 
-project(k-means CXX)
+project(Project-Euler CXX)
 include(cmake/StandardProjectSettings.cmake)
 
-add_library(kmn INTERFACE)
-target_include_directories(kmn INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_library(eul INTERFACE)
+target_include_directories(eul INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)

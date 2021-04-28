@@ -1,9 +1,9 @@
-add_executable(demo demo.cpp)
+add_executable(solution solution.cpp)
 
 target_link_libraries(
-  demo
+  solution
   PRIVATE
-    kmn
+    eul
     project_options
     project_warnings
     fmt::fmt
