@@ -1,5 +1,6 @@
 add_executable(P1 P1.cpp)
 add_executable(P2 P2.cpp)
+add_executable(P3 P3.cpp)
 
 set(LIBS
       eul
@@ -15,5 +16,10 @@ target_link_libraries(
 
 target_link_libraries(
   P2
+  PRIVATE
+    ${LIBS})
+
+target_link_libraries(
+  P3
   PRIVATE
     ${LIBS})
