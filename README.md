@@ -17,8 +17,11 @@ If you wish to build all targets:
 ```
 cmake --build build/
 ```
-If you wish to build a specific target e.g. P1:
+If you wish to build a specific single or multiple targets e.g. `P1` and `P2`:
 ```
-cmake --build build/ --target P1
+cmake --build build/ --target P1 P2
 ```
-You may then execute the target with `./build/src/P1`.
+You may then execute your `<target>` with
+```
+./build/src/<target>
+```
