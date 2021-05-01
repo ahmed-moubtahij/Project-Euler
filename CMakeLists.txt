@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     CACHE PATH "Path to vcpkg toolchain")
 
-project(Project-Euler CXX)
+project(project-euler CXX)
 include(cmake/StandardProjectSettings.cmake)
 
 add_library(eul INTERFACE)
