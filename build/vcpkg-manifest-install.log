@@ -1,3 +1,0 @@
-Errors occurred while parsing /home/ayenem/Project-Euler/vcpkg.json
-    $.name (an identifier): must be lowercase alphanumeric+hyphens and not reserved (see https://github.com/Microsoft/vcpkg/tree/master/docs/specifications/manifests.md for more information)
-See https://github.com/Microsoft/vcpkg/tree/master/docs/users/manifests.md for more information.
