@@ -17,7 +17,7 @@ If you wish to build all targets:
 ```
     cmake --build build/
 ```
-If you wish to target a specific one e.g. P1:
+If you wish to build a specific target e.g. P1:
 ```
     cmake --build build/ --target P1
 ```
