@@ -9,9 +9,16 @@
 **Build Instructions**
 ```
     cd path/to/your/folder
-    git clone https://github.com/Ayenem/k-means.git --recursive
-    cd k-means
+    git clone https://github.com/Ayenem/Project-Euler.git --recursive
+    cd Project-Euler
     cmake -B build
-    cmake --build build
 ```
-You may then execute the provided example to ensure everything works e.g. `./build/src/demo`.
+If you wish to build all targets:
+```
+    cmake --build build/
+```
+If you wish to target a specific one e.g. P1:
+```
+    cmake --build build/ --target P1
+```
+You may then execute the target with `./build/src/P1`.
