@@ -8,17 +8,17 @@
 
 **Build Instructions**
 ```
-    cd path/to/your/folder
-    git clone https://github.com/Ayenem/Project-Euler.git --recursive
-    cd Project-Euler
-    cmake -B build
+cd path/to/your/folder
+git clone https://github.com/Ayenem/Project-Euler.git --recursive
+cd Project-Euler
+cmake -B build
 ```
 If you wish to build all targets:
 ```
-    cmake --build build/
+cmake --build build/
 ```
 If you wish to build a specific target e.g. P1:
 ```
-    cmake --build build/ --target P1
+cmake --build build/ --target P1
 ```
 You may then execute the target with `./build/src/P1`.
