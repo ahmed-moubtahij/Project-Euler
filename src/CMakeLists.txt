@@ -1,25 +1,17 @@
-add_executable(P1 P1.cpp)
-add_executable(P2 P2.cpp)
-add_executable(P3 P3.cpp)
-
-set(LIBS
+function(add_and_link_executable target)
+  add_executable(${target} ${ARGN})
+  target_link_libraries(${target} PRIVATE
       eul
       project_options
       project_warnings
       fmt::fmt
       range-v3::range-v3)
+endfunction()
 
-target_link_libraries(
-  P1
-  PRIVATE
-    ${LIBS})
+function(magic_target target)
+  add_and_link_executable(${target} ${target}.cpp)
+endfunction()
 
-target_link_libraries(
-  P2
-  PRIVATE
-    ${LIBS})
-
-target_link_libraries(
-  P3
-  PRIVATE
-    ${LIBS})
+magic_target(P1)
+magic_target(P2)
+magic_target(P3)
