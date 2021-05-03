@@ -6,15 +6,14 @@
 // https://projecteuler.net/problem=1
 
 int main(){
-    namespace rnv = ranges::views;
-    using rnv::iota, rnv::filter, ranges::accumulate;
+    namespace r = ranges;
+    namespace rv = r::views;
     
-    auto constexpr is_mult_of_3_or_5 = [](unsigned int n)
-    { return n % 3u == 0u or n % 5u == 0u; };
+    constexpr auto is_mult_of_3_or_5 = [](int n)
+    { return n % 3 == 0 or n % 5 == 0; };
     
-    auto const result = accumulate(iota(3u, 1000u)
-                                 | filter(is_mult_of_3_or_5),
-                                   0u);
+    auto const result = r::accumulate(rv::ints(3, 1000)
+                                    | rv::filter(is_mult_of_3_or_5),
+                                      0u);
     fmt::print("{}\n", result);
 }
-
