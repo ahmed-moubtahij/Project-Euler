@@ -1,8 +1,9 @@
-#include <eul/is_prime.hpp>
-#include <range/v3/view/iota.hpp>
-#include <range/v3/view/transform.hpp>
-#include <range/v3/view/take_while.hpp>
 #include <fmt/core.h>
+#include <eul/is_prime.hpp> // eul::oddly_factorable
+#include <range/v3/view/iota.hpp>
+#include <range/v3/view/stride.hpp>
+#include <range/v3/view/remove_if.hpp>
+#include <range/v3/view/drop_exactly.hpp>
 
 // https://projecteuler.net/problem=7
 
@@ -10,22 +11,17 @@ int main(){
   namespace r = ranges;
   namespace rv = r::views;
 
-  int count{ 10'001 }, cache_prime;
-
-  auto seeking_nth_prime = [&count, &cache_prime](int const i)
-  {
-    if(eul::is_prime(i))
-    {
-      cache_prime = i;
-      --count;
-    } 
-    return count != 0; 
-  };
+  int const count{ 10'001 }; 
+  int const offset{ 2 }; // For the 1st prime (2) and for retaining last
   
-  auto primes = rv::ints(2, r::unreachable)
-              | rv::take_while(seeking_nth_prime);
+  auto n_primes = rv::ints(3, r::unreachable)
+                | rv::stride(2)
+                | rv::remove_if(eul::oddly_factorable)
+                | rv::drop_exactly(count - offset);
   
-  for(auto _ : primes) (void)_; // Trigger the lazy range
+  fmt::print("{}\n", *r::begin(n_primes));
   
-  fmt::print("{}\n", cache_prime); // Pick up the cache_prime side-effect
+  // Thanks to killerbee13@includecpp
+  // for suggesting ranges::drop and taking from the front
+  // as opposed to ranges::take, eager void looping and views::take_last(1)-ing the back
 }
