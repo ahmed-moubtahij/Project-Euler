@@ -5,7 +5,7 @@ namespace eul{
 
 constexpr auto oddly_factorable(int const n_to_factor) -> bool
 {
-  for(int divider{ 3 }; n_to_factor >= divider * divider; divider += 2)
+  for(int divider{ 3 }; divider * divider <= n_to_factor; divider += 2)
   {
     if(n_to_factor % divider == 0)
       return true;
