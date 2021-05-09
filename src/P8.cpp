@@ -58,5 +58,5 @@ int main(){
   
   u64 max_product = *r::max_element(products);
   
-  fmt::print("{}\n", max_product); // Right answer: 23'514'624'000
+  fmt::print("{}\n", max_product);
 }
