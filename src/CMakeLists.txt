@@ -1,4 +1,4 @@
-function(add_and_link_executable target)
+function(add_and_link_target target)
   add_executable(${target} ${ARGN})
   target_link_libraries(${target} PRIVATE
       eul
@@ -9,14 +9,9 @@ function(add_and_link_executable target)
 endfunction()
 
 function(magic_target target)
-  add_and_link_executable(${target} ${target}.cpp)
+  add_and_link_target(${target} ${target}.cpp)
 endfunction()
 
-magic_target(P1)
-magic_target(P2)
-magic_target(P3)
-magic_target(P4)
-magic_target(P5)
-magic_target(P6)
-magic_target(P7)
-magic_target(P8)
+foreach(i RANGE 1 10)
+  magic_target(P${i})
+endforeach()
