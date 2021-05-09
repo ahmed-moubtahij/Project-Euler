@@ -1,5 +1,5 @@
-#ifndef K_COMBINATIONS
-#define K_COMBINATIONS
+#ifndef EUL_K_COMBINATIONS_HPP
+#define EUL_K_COMBINATIONS_HPP
 
 #include <concepts>
 #include <utility> // std::index_sequence, std::move
@@ -12,7 +12,7 @@ namespace eul{
 
 template<std::size_t K>
 [[nodiscard]] constexpr
-auto k_combinations(int from, int to, std::relation<int, int> auto bin_op) noexcept
+auto k_combinations(int from, int to, std::regular_invocable auto op) noexcept
 {
   namespace rv = ranges::views;
 
@@ -22,8 +22,8 @@ auto k_combinations(int from, int to, std::relation<int, int> auto bin_op) noexc
     return rv::cartesian_product((void(Is), rv::ints(from, to))...);
   };
   
-  auto const fold_tuple = [bin_op](auto common_tuple)
-  { return std::apply(bin_op, std::move(common_tuple)); };
+  auto const fold_tuple = [op](auto common_tuple)
+  { return std::apply(op, std::move(common_tuple)); };
   
   return k_cartesian(std::make_index_sequence<K>())
        | rv::transform(fold_tuple);
@@ -31,4 +31,4 @@ auto k_combinations(int from, int to, std::relation<int, int> auto bin_op) noexc
 
 } // namespace eul
 
-#endif // !K_COMBINATIONS
+#endif // !EUL_K_COMBINATIONS_HPP
