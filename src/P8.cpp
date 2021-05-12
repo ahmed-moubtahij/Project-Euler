@@ -1,6 +1,5 @@
 #include <fmt/core.h>
 #include <string_view>
-#include <functional> // std::multiplies
 #include <cstdint> // std::uint64_t
 #include <range/v3/view/sliding.hpp>
 #include <range/v3/view/transform.hpp>
@@ -14,7 +13,7 @@ int main(){
   namespace r = ranges;
   namespace rv = r::views;
 
-  auto const bigNum = std::string_view{
+  constexpr auto bigNum = std::string_view{
     "73167176531330624919225119674426574742355349194934"
     "96983520312774506326239578318016984801869478851843"
     "85861560789112949495459501737958331952853208805511"
@@ -38,17 +37,20 @@ int main(){
   };
 
   using u64 = std::uint64_t;
-
   u64 const nb_adjacent_digits{ 13 };
 
-  auto to_digits = [](auto str_digits)
+  constexpr auto to_digits = [](auto const str_digits)
   { return std::move(str_digits) | rv::transform(eul::ctoi); };
 
-  auto fold_multiply = [to_digits](auto string_window)
+  constexpr auto bin_multiply =
+  [](u64 const a, u64 const b){ return a * b; };
+
+  constexpr auto fold_multiply =
+  [to_digits, bin_multiply](auto const string_window)
   {
     return r::accumulate(
       to_digits(std::move(string_window)),
-      u64{ 1 }, std::multiplies{}
+      u64{ 1 }, bin_multiply
     );
   };
 
@@ -56,7 +58,5 @@ int main(){
                 | rv::sliding(nb_adjacent_digits)
                 | rv::transform(fold_multiply);
   
-  u64 max_product = *r::max_element(products);
-  
-  fmt::print("{}\n", max_product);
+  fmt::print("{}\n", *r::max_element(products));
 }

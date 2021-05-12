@@ -1,5 +1,5 @@
 #include <fmt/ranges.h>
-#include <range/v3/view/iota.hpp>
+#include <range/v3/view/iota.hpp> // views::ints
 #include <range/v3/view/take_while.hpp>
 #include <algorithm>
 
@@ -21,8 +21,6 @@ int main(){
   auto range = rv::ints(1, r::unreachable)
              | rv::take_while(any_div_remainder);
 
-  // Adding one because views::iota is half-open
-  auto answer = *stdr::max_element(range) + 1; 
-
-  fmt::print("{}\n", answer);
+  // Adding one because views::ints is half-open
+  fmt::print("{}\n", *stdr::max_element(range) + 1);
 }

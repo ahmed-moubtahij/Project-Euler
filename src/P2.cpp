@@ -4,7 +4,6 @@
 #include <range/v3/view/take_while.hpp>
 #include <range/v3/view/filter.hpp>
 #include <cstdint>
-#include <concepts>
 
 // https://projecteuler.net/problem=2
 
@@ -24,11 +23,11 @@ int main(){
 
     constexpr auto lt_upper_bound = [](u32 n){ return n < 4'000'000; };
 
-    std::unsigned_integral auto result = r::accumulate(
-                                         rv::generate(fibonacci)
-                                       | rv::take_while(lt_upper_bound)
-                                       | rv::filter(is_even),
-                                       u32{ 0 });
-    
-    fmt::print("{}\n", result);
+    fmt::print("{}\n",
+      r::accumulate(
+        rv::generate(fibonacci)
+      | rv::take_while(lt_upper_bound)
+      | rv::filter(is_even),
+      u32{ 0 }
+    ));
 }
