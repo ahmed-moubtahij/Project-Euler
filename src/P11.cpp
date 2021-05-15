@@ -54,7 +54,6 @@ class Grid{
          | rv::for_each(sliding_window(length));
   }
 
-  // Look into avoiding transpose and joining ranges of stride(D)
   [[nodiscard]]
   auto vertical_windows(sz_t const length) const
   {
@@ -73,19 +72,18 @@ class Grid{
          | rv::for_each(sliding_window(length));
   }
   
-  // Nttp argument needed here for std::make_index_sequence
-  template<sz_t L>
   [[nodiscard]]
-  auto diagonal_windows() const
+  auto diagonal_windows(sz_t const length) const
   {
     namespace rv = ranges::views;
 
-    auto diagonal = [&flat_grid = m_flat_grid](sz_t const i)
+    auto diagonal =
+    [&flat_grid = m_flat_grid, length](sz_t const i)
     {
       return flat_grid
            | rv::drop_exactly(i)  // start of the stride
            | rv::stride(D - 1)    // diagonal strides
-           | rv::take_exactly(L); // #strides
+           | rv::take_exactly(length); // #strides
     };
 
     auto generate_diagonals = [diagonal]
@@ -96,22 +94,22 @@ class Grid{
            | rv::transform(diagonal);
     };
 
-    auto row_left_sequence = [](sz_t const row_i)
+    auto row_left_sequence = [length](sz_t const row_i)
     {
       return rv::ints(
-        row_i*D + L - 1, (row_i + 1)*D
+        row_i*D + length - 1, (row_i + 1)*D
       );
     };
 
     auto left_diagonals = generate_diagonals(
-      0, D - (L - 1), row_left_sequence
+      0, D - (length - 1), row_left_sequence
     );
 
-    auto row_right_sequence = [](sz_t const i)
+    auto row_right_sequence = [length](sz_t const i)
     {
       return rv::generate_n(
               [n = sz_t{ 1 }, i]() mutable { return i*D - n++; },
-              D - (L - 1)
+              D - (length - 1)
             );
     };
 
@@ -165,7 +163,7 @@ int main()
   auto folded_windows = rv::concat(
     fold_product_windows(grid.horizontal_windows(length)),
     fold_product_windows(grid.vertical_windows(length)),
-    fold_product_windows(grid.diagonal_windows<length>())
+    fold_product_windows(grid.diagonal_windows(length))
   );
 
   fmt::print("{}\n", r::max(folded_windows));
