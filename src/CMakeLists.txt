@@ -12,6 +12,6 @@ function(magic_target target)
   add_and_link_target(${target} ${target}.cpp)
 endfunction()
 
-foreach(i RANGE 1 10)
+foreach(i RANGE 1 11)
   magic_target(P${i})
 endforeach()

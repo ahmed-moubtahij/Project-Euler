@@ -17,7 +17,9 @@ auto k_cartesian(int from, int to) noexcept
   namespace rv = ranges::views;
   return [from, to]<std::size_t ...Is>(std::index_sequence<Is...>)
   {
-    return rv::cartesian_product((void(Is), rv::ints(from, to))...);
+    return rv::cartesian_product(
+        (void(Is), rv::ints(from, to))...
+    );
   }
   (std::make_index_sequence<K>());
 }

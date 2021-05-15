@@ -9,7 +9,7 @@ int main()
   namespace stdr = std::ranges;
 
   constexpr auto bin_multiply =
-  [](int const a, int const b){ return a * b; } ;
+  [](int a, int b){ return a * b; } ;
   
   auto palindromes = eul::k_combinations<2>(100, 1000, bin_multiply)
                    | rv::filter(eul::is_palindrome);

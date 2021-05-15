@@ -13,7 +13,9 @@ struct is_palindrome_fn
   constexpr auto operator()(std::integral auto n) const noexcept
   {
     auto const str = std::to_string(n);
-    return std::ranges::equal(str, str | ranges::views::reverse);
+    return std::ranges::equal(
+        str, str | ranges::views::reverse
+    );
   }
 };
 

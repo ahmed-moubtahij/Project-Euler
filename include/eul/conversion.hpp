@@ -2,9 +2,14 @@
 #define EUL_CONVERSION_HPP
 
 namespace eul{
-  
-  constexpr auto ctoi(char c) -> int {
-	return c - '0';
+
+  // T is a parameter to allow the caller
+  // to handle conversion & overflowing
+  // in following operations
+  template<typename T = int>
+  constexpr auto ctoi(char c) -> T
+  {
+	return static_cast<T>(c - '0');
   }
 
 } // namespace eul

@@ -13,7 +13,6 @@ int main()
 {
   namespace r = ranges;
   namespace rv = r::views;
-  using u64 = std::uint64_t;
 
   constexpr int upper_bound{ 2'000'000 };
 
@@ -25,5 +24,5 @@ int main()
               | rv::remove_if(eul::oddly_factorable)
               | rv::take_while(lt_upper_bound);
 
-  fmt::print("{}\n", 2 + r::accumulate(primes, u64{ 0 }));
+  fmt::print("{}\n", 2 + r::accumulate(primes, std::uint64_t{ 0 }));
 }

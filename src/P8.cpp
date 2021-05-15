@@ -4,7 +4,8 @@
 #include <range/v3/view/sliding.hpp>
 #include <range/v3/view/transform.hpp>
 #include <range/v3/numeric/accumulate.hpp>
-#include <range/v3/algorithm/max_element.hpp>
+#include <range/v3/algorithm/max.hpp>
+#include <eul/fold.hpp>
 #include <eul/conversion.hpp> // eul::ctoi
 
 // https://projecteuler.net/problem=8
@@ -37,26 +38,18 @@ int main(){
   };
 
   using u64 = std::uint64_t;
-  u64 const nb_adjacent_digits{ 13 };
+  u64 const nb_of_adjacent_digits{ 13 };
 
-  constexpr auto to_digits = [](auto const str_digits)
-  { return std::move(str_digits) | rv::transform(eul::ctoi); };
-
-  constexpr auto bin_multiply =
-  [](u64 const a, u64 const b){ return a * b; };
-
-  constexpr auto fold_multiply =
-  [to_digits, bin_multiply](auto const string_window)
+  constexpr auto to_digits = [](auto str_digits)
   {
-    return r::accumulate(
-      to_digits(std::move(string_window)),
-      u64{ 1 }, bin_multiply
-    );
+    return std::move(str_digits)
+         | rv::transform(eul::ctoi<u64>);
   };
 
   auto products = bigNum
-                | rv::sliding(nb_adjacent_digits)
-                | rv::transform(fold_multiply);
+                | rv::sliding(nb_of_adjacent_digits)
+                | rv::transform(to_digits)
+                | rv::transform(eul::fold::product);
   
-  fmt::print("{}\n", *r::max_element(products));
+  fmt::print("{}\n", r::max(products));
 }
