@@ -15,7 +15,7 @@ namespace r = ranges;
 namespace rv = r::views;
 
 template<unsigned N, typename T = std::uint32_t>
-constexpr auto triangular_divisors() noexcept
+constexpr auto triangle_nb_with_over_n_divisors() noexcept
 {
     constexpr auto from = T{ 1 };
     
@@ -53,6 +53,6 @@ int main(){
     constexpr unsigned n_divisors{ 500 };
     
     fmt::print("\n{}\n",
-        triangular_divisors<n_divisors>()
+        triangle_nb_with_over_n_divisors<n_divisors>()
     );
 }
