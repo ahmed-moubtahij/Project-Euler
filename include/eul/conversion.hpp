@@ -5,7 +5,7 @@ namespace eul{
 
   // T is a parameter to allow the caller
   // to handle conversion & overflowing
-  // in following operations
+  // in subsequent operations
   template<typename T = int>
   constexpr auto ctoi(char c) -> T
   {
