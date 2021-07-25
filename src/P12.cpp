@@ -1,6 +1,3 @@
-// NOTE: TIMES OUT ON GODBOLT, NEEDS TESTING ON VS
-// https://godbolt.org/z/5sTzsxds4
-
 #include <fmt/ranges.h>
 #include <range/v3/view/indices.hpp>
 #include <range/v3/view/transform.hpp>
@@ -12,28 +9,49 @@
 namespace r = ranges;
 namespace rv = r::views;
 
+// TODO: Move this to include/eul/
+namespace eul{
+  template<std::integral T>
+  struct divides{
+    T m;
+    [[nodiscard]] constexpr
+    auto operator()(T const i) const -> bool
+    { return m % i == 0; }
+  };
+
+  template<std::integral T>
+  struct greater_than{
+    T m;
+    [[nodiscard]] constexpr
+    auto operator()(T const i) const -> bool
+    { return i > m; }
+  };
+}
+
 template<typename T = std::uint32_t>
 [[nodiscard]] constexpr
 auto triangle_nb_with_over_n_divisors(unsigned n) noexcept
 {
   struct P{ T triangle_nb; T factors_count; };
 
-  auto pair_with_factors_count = [](T n) -> P
+  auto append_factors_count = [](T n) -> P
   {
-    auto factors =
-      rv::indices(1u, n + 1u)
-      | rv::filter([n](T const i){ return n % i == 0; });
-    return {n, static_cast<T>(r::distance(std::move(factors)))};
+    return {n,
+      static_cast<T>(r::distance(
+          rv::indices(1u, n + 1u)
+        | rv::filter(eul::divides{ n })
+      ))
+    };
   };
   
   auto triangles_with_factors_count =
     rv::indices
     | rv::partial_sum // triangle numbers
-    | rv::transform(std::move(pair_with_factors_count));
+    | rv::transform(std::move(append_factors_count));
 
   return (*r::find_if(
     triangles_with_factors_count,
-    [n](T const count){ return count > n; },
+    eul::greater_than{ n },
     &P::factors_count
   )).triangle_nb;
 }
