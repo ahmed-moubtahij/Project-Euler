@@ -6,7 +6,7 @@ set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems
 project(project-euler CXX)
 include(cmake/StandardProjectSettings.cmake)
 
-add_library(eul INTERFACE)
+add_library(eul INTERFACE)  
 target_include_directories(eul INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link this 'library' to set the c++ standard / compile-time options requested
