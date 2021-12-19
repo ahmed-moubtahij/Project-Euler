@@ -1,48 +1,60 @@
-#include <fmt/core.h>
-#include <range/v3/view/indices.hpp>
-#include <range/v3/view/transform.hpp>
-#include <range/v3/view/filter.hpp>
-#include <range/v3/view/partial_sum.hpp>
-#include <range/v3/algorithm/find_if.hpp>
-#include <eul/numbers_properties.hpp>
+// https://godbolt.org/z/bPoP7Garn
 
+#include <range/v3/algorithm/fold_left.hpp>
+#include <range/v3/view/iota.hpp> // ranges::view::ints
+#include <range/v3/view/generate.hpp>
+#include <algorithm>
+#include <fmt/core.h>
+
+#define MOV(x) static_cast<std::remove_cvref_t<decltype(x)>&&>(x)
+#define FWD(x) static_cast<decltype(x)&&>(x)
+
+namespace e12{
+
+namespace stdr = std::ranges;
 namespace r = ranges;
 namespace rv = r::views;
+using u32 = std::uint32_t;
 
-template<std::unsigned_integral T>
-[[nodiscard]]
-auto triangle_nb_with_over_n_divisors(T n) noexcept -> T
-{
-  struct P{ T triangle_nb; T factors_count; };
+struct n_divisible_triangle_fn{
 
-  auto append_factors_count = [](T triangle_nb) -> P
-  {
-    return {
-      triangle_nb,
-      static_cast<T>(r::distance(
-          rv::indices(T{ 1 }, triangle_nb + T{ 1 })
-        | rv::filter(eul::divides{ triangle_nb })
-      ))
-    };
-  };
+struct TDC{
+  u32 triangle_number{};
+  std::size_t divisors_count{};
+
+  explicit constexpr TDC(u32 n)
+  : triangle_number{ nth_triangle_nb(n) }
+  , divisors_count{ count_divisors(triangle_number) }
+  { }
+
+  static constexpr auto nth_triangle_nb(u32 n) -> u32
+  { return *r::fold_left_first(rv::ints(1u, n + 1u), std::plus{}); }
   
-  auto triangles_with_factors_count =
-    rv::indices
-    | rv::partial_sum // triangle numbers
-    | rv::transform(std::move(append_factors_count));
+  static constexpr auto count_divisors(u32 value) -> u32
+  {
+    if (value == 1)
+      return 1u;
+    
+    auto divides_value = [value](u32 i){ return value % i == 0; };
+    return 2 + static_cast<u32>(
+      stdr::count_if(rv::ints(2u, value), MOV(divides_value))); 
+  }
+}; // !struct TDC
 
-  return (*r::find_if(
-    triangles_with_factors_count,
-    eul::greater_than{ n },
-    &P::factors_count
-  )).triangle_nb;
+[[nodiscard]] auto operator()(u32 n) const noexcept -> TDC
+{
+  auto tdcs_gen = rv::generate([n] mutable { return TDC(n++); });
+  auto gt_n = [n](u32 const divs_count){ return divs_count > n; };
+  return *stdr::find_if(tdcs_gen, MOV(gt_n), &TDC::divisors_count);
 }
 
+}; // !struct n_divisible_triangle_fn
+
+inline constexpr n_divisible_triangle_fn n_divisible_triangle;
+
+} // !namespace e12
+
 int main(){
-  //constexpr unsigned n_divisors{ 300 }; // works
-   constexpr unsigned n_divisors{ 500 }; // too much compile time; range-v3's fault
-  
-  fmt::print("{}\n",
-    triangle_nb_with_over_n_divisors(n_divisors)
-  );
+  auto [triangle_nb, divisors_count] = e12::n_divisible_triangle(310);
+  fmt::print("{}: {}\n", triangle_nb, divisors_count);
 }
